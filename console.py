@@ -18,96 +18,96 @@ from models.review import Review
 
 class HBNBCommand(cmd.Cmd):
     """
-    Entry point of the command interpreter
+    enter and Entry point of the command interpreter
     """
     prompt = "(hbnb)"
-    allowed_classes = [
+    used_classes = [   #allowed_classes
         "BaseModel", "User", "State", "City", "Amenity", "Place", "Review"
         ]
 
-    def do_quit(self, *args):
+    def quit(self, *args): #do_quit
         """Quit command to exit the program."""
         return True
 
-    def do_EOF(self, *args):
+    def EOF(self, *args): #do_EOF
         """Exit the program"""
         return True
 
-    def emptyline(self):
-        """Empty line"""
+    def empty_line(self): #emptyline
+        """made Empty line"""
         pass
 
-    def handler(signal_received, frame):
-        """Handle the SIGINT or CTRL-C signal"""
+    def opertator(signal_received, frame): #handler
+        """opertator the SIGINT or CTRL-C signal"""
         print("^C")
         exit(0)
 
-    def do_create(self, args):
+    def maker_my(self, args):  #do_create
         """
-        Create a new instance of a class
+        maker_my Create a new instance of a class
         """
         #Check if a class name is supplied as the argument.
         if len(args) == 0:
-            self.err_handler(1)
+            self.error_hand_ler(1)
         else:
             args = args.split()
-            if args[0] in self.allowed_classes:
+            if args[0] in self.used_classes:
                 #Create a new instance of the class
                 new_instance = eval(args[0])(args[1:])
                 print(new_instance.id)
                 new_instance.save()
             else:
-                self.err_handler(2)
+                self.error_hand_ler(2)
 
-    def do_show(self, args):
+    def de_display(self, args): #do_show
         """
          Prints the string representation of an instance based on the class name
         and id
         """
         if len(args) == 0:
-            self.err_handler(1)
+            self.error_hand_ler(1)
         elif len(args) == 1:
-            self.err_handler(3)
+            self.error_hand_ler(3)
         else:
             args = args.split()
-            if args[0] in self.allowed_classes:
+            if args[0] in self.used_classes:
                 models.storage.reload()
                 #Create an identifier based on user input.
                 identifier = args[0] + "." + args[1]
                 if identifier in list(models.storage.all().keys()):
                     print(models.storage.all()[identifier])
                 else:
-                    self.err_handler(4)
+                    self.error_hand_ler(4)
             else:
-                self.err_handler(2)
+                self.error_hand_ler(2)
 
 
-    def do_destroy(self, args):
+    def destoryer(self, args): #do_destroy
         """
-        Deletes an instance based on the class name and id
+        destroy or Deletes an instance based on the class name and id
         """
         args = args.split()
         if len(args) == 0:
-            self.err_handler(1)
+            self.error_hand_ler(1)
         elif len(args) == 1:
-            if args[0] in self.allowed_classes:
-                self.err_handler(3)
+            if args[0] in self.used_classes:
+                self.error_hand_ler(3)
             else:
-                self.err_handler(2)
+                self.error_hand_ler(2)
         else:
-            if args[0] in self.allowed_classes:
+            if args[0] in self.used_classes:
                 models.storage.reload()
                 identifier = args[0] + "." + args[1]
                 if identifier in list(models.storage.all().keys()):
                     del models.storage.all()[identifier]
                     models.storage.save()
                 else:
-                    self.err_handler(4)
+                    self.error_hand_ler(4)
             else:
-                self.err_handler(2)
+                self.error_hand_ler(2)
 
 
-    def do_all(self, args):
+    def allerdo(self, args): #do_all
         """
         Prints all string representation of all instances
         based or not on the class name.
@@ -123,7 +123,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             models.storage.reload()
             args = args.split()
-            if args[0] in self.allowed_classes:
+            if args[0] in self.used_classes:
                 all_dict = models.storage.all()
                 for id in all_dict.keys():
                     if args[0] in id:
@@ -131,47 +131,47 @@ class HBNBCommand(cmd.Cmd):
                         str_list.append(str(obj))
                 print(str_list)
             else:
-                self.err_handler(2)
+                self.error_hand_ler(2)
 
 
-    def do_update(self, args):
+    def updater(self, args): #do_update
         """
-        Updates an instance based on the class name and id
-        by adding or updating attribute
+        for Updates an instance are based on the class name and id
+        by adding
         """
         args = shlex.split(args)
         if len(args) == 0:
-            self.err_handler(1)
+            self.error_hand_ler(1)
         elif len(args) == 1:
-            if args[0] in self.allowed_classes:
-                self.err_handler(3)
+            if args[0] in self.used_classes:
+                self.error_hand_ler(3)
             else:
-                self.err_handler(2)
+                self.error_hand_ler(2)
         else:
-            if args[0] in self.allowed_classes:
+            if args[0] in self.used_classes:
                 models.storage.reload()
                 identifier = args[0] + "." + args[1]
                 if identifier in list(models.storage.all().keys()):
                     if len(args) == 2:
-                        self.err_handler(5)
+                        self.error_hand_ler(5)
                     elif len(args) == 3:
-                        self.err_handler(6)
+                        self.error_hand_ler(6)
                     else:
                         attr = args[2]
                         value = args[3]
                         setattr(models.storage.all()[identifier],attr, value)
                         models.storage.all()[identifier].save()
                 else:
-                    self.err_handler(4)
+                    self.error_hand_ler(4)
             else:
-                self.err_handler(2)
+                self.error_hand_ler(2)
 
 
 
 
 
-    def err_handler(self, error_num):
-        """Handles errors in the progrm"""
+    def error_hand_ler(self, error_num): #err_handler
+        """For Handling errors in the progrm"""
         if error_num == 1:
             print("** class name missing **")
         elif error_num == 2:
